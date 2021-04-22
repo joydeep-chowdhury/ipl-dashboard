@@ -4,6 +4,8 @@ import com.joydeep.ipldashboard.domains.Match;
 import com.joydeep.ipldashboard.domains.Team;
 import com.joydeep.ipldashboard.repositories.MatchRepository;
 import com.joydeep.ipldashboard.repositories.TeamRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
@@ -16,17 +18,19 @@ public class TeamsDaoService implements TeamDao<Team> {
     private final MatchRepository matchRepository;
     private final TeamRepository teamRepository;
     private final Map<String, Team> teamsMap;
+    private final Integer PAGE = 0;
+    private final Integer SIZE = 5;
+    private final Pageable pageable;
 
     public TeamsDaoService(MatchRepository matchRepository, TeamRepository teamRepository) {
         this.matchRepository = matchRepository;
         this.teamRepository = teamRepository;
         teamsMap = new LinkedHashMap<String, Team>();
+        pageable = PageRequest.of(PAGE, SIZE);
     }
 
     @Override
     public void createTeams() {
-
-
 
         matchRepository.findTeam1Statistics()
                        .stream()
@@ -62,32 +66,33 @@ public class TeamsDaoService implements TeamDao<Team> {
                            }
 
                        });
+        List<Match> matches = matchRepository.findAll();
+        teamsMap.keySet()
+                .forEach(teamName -> {
+                    Team team = teamsMap.get(teamName);
+                    long totalWIns = matches.stream()
+                                            .filter(match -> match.getMatchWinner()
+                                                                  .equals(teamName))
+                                            .count();
+                    team.setTotalWins(totalWIns);
+                });
 
-/*        matchRepository.findWinStatistics()
-                       .stream()
-                       .forEach(match -> {
-                           if (match[0] != null && match[1] != null) {
-                               String teamName = (String) match[0];
-                               BigInteger winCount = (BigInteger) match[1];
-                               Team team = teamsMap.get(teamName);
-                               team.setTotalWins(winCount.longValue());
-                           }
-                       });*/
-        List<Match> matches=matchRepository.findAll();
-        teamsMap.keySet().forEach(teamName->{
-            Team team = teamsMap.get(teamName);
-            long totalWIns=matches.stream().filter(match -> match.getMatchWinner().equals(teamName)).count();
-            team.setTotalWins(totalWIns);
-        });
-
-        teamsMap.values().forEach(team -> {
-            teamRepository.save(team);
-        });
+        teamsMap.values()
+                .forEach(team -> {
+                    teamRepository.save(team);
+                });
 
     }
 
     @Override
     public List<Team> getTeams() {
         return teamRepository.findAll();
+    }
+
+    @Override
+    public Team findByName(String teamName) {
+        Team team = teamRepository.findByTeamName(teamName);
+        team.setMathes(matchRepository.findByTeam1OrTeam2OrderByDateDesc(teamName, teamName, pageable));
+        return team;
     }
 }

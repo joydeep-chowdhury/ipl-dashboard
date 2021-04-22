@@ -8,5 +8,6 @@ public interface TeamDao<T> {
 
     void createTeams();
     List<T> getTeams();
+    T findByName(String name);
 
 }

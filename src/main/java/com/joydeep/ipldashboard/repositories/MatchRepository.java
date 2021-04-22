@@ -1,6 +1,7 @@
 package com.joydeep.ipldashboard.repositories;
 
 import com.joydeep.ipldashboard.domains.Match;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,5 +18,7 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
 
     @Query(nativeQuery = true, value = "SELECT matchWinner , COUNT(*) from Match GROUP BY matchWinner")
     List<Object[]> findWinStatistics();
+
+    List<Match> findByTeam1OrTeam2OrderByDateDesc(String team1, String team2, Pageable pageable);
 
 }

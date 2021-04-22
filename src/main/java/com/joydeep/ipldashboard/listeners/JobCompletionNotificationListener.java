@@ -33,8 +33,6 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             log.info("!!! JOB FINISHED! Time to verify the results");
             teamDao.createTeams();
-            List<Team> teams = teamDao.getTeams();
-            System.out.println(teams);
 
         }
     }

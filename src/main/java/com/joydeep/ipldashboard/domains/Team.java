@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 public class Team {
@@ -14,6 +16,8 @@ public class Team {
     private String teamName;
     private long totalMatches;
     private long totalWins;
+    @Transient
+    private List<Match> mathes;
 
     public Team(String teamName) {
         this.teamName = teamName;
@@ -25,6 +29,14 @@ public class Team {
 
     public long getId() {
         return id;
+    }
+
+    public List<Match> getMathes() {
+        return mathes;
+    }
+
+    public void setMathes(List<Match> mathes) {
+        this.mathes = mathes;
     }
 
     public void setId(long id) {
@@ -57,6 +69,6 @@ public class Team {
 
     @Override
     public String toString() {
-        return "Team{" + "id=" + id + ", teamName='" + teamName + '\'' + ", totalMatches=" + totalMatches + ", totalWins=" + totalWins + '}';
+        return "Team{" + "id=" + id + ", teamName='" + teamName + '\'' + ", totalMatches=" + totalMatches + ", totalWins=" + totalWins + ", mathes=" + mathes + '}';
     }
 }
