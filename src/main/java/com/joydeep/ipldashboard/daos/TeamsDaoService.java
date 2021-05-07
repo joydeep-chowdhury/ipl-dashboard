@@ -9,12 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 @Service
-public class TeamsDaoService implements TeamDao<Team> {
+public class TeamsDaoService implements TeamDao<Team,Match> {
     private final MatchRepository matchRepository;
     private final TeamRepository teamRepository;
     private final Map<String, Team> teamsMap;
@@ -92,7 +93,13 @@ public class TeamsDaoService implements TeamDao<Team> {
     @Override
     public Team findByName(String teamName) {
         Team team = teamRepository.findByTeamName(teamName);
-        team.setMathes(matchRepository.findByTeam1OrTeam2OrderByDateDesc(teamName, teamName, pageable));
+        team.setMatches(matchRepository.findByTeam1OrTeam2OrderByDateDesc(teamName, teamName, pageable));
         return team;
     }
+
+	@Override
+	public List<Match> findByNameAndYear(String name, int year) {
+		// TODO Auto-generated method stub
+		return matchRepository.findByTeamInYear(name,LocalDate.of(year, 1, 1), LocalDate.of(year+1, 1, 1));
+	}
 }

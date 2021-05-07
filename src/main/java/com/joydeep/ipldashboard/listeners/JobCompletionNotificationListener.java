@@ -1,6 +1,7 @@
 package com.joydeep.ipldashboard.listeners;
 
 import com.joydeep.ipldashboard.daos.TeamDao;
+import com.joydeep.ipldashboard.domains.Match;
 import com.joydeep.ipldashboard.domains.Team;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,10 +21,10 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
 
     private final JdbcTemplate jdbcTemplate;
 
-    private final TeamDao<Team> teamDao;
+    private final TeamDao<Team,Match> teamDao;
 
     @Autowired
-    public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate, TeamDao<Team> teamDao) {
+    public JobCompletionNotificationListener(JdbcTemplate jdbcTemplate, TeamDao<Team,Match> teamDao) {
         this.jdbcTemplate = jdbcTemplate;
         this.teamDao = teamDao;
     }

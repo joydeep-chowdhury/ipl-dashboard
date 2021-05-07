@@ -17,7 +17,7 @@ public class Team {
     private long totalMatches;
     private long totalWins;
     @Transient
-    private List<Match> mathes;
+    private List<Match> matches;
 
     public Team(String teamName) {
         this.teamName = teamName;
@@ -31,12 +31,12 @@ public class Team {
         return id;
     }
 
-    public List<Match> getMathes() {
-        return mathes;
+    public List<Match> getMatches() {
+        return matches;
     }
 
-    public void setMathes(List<Match> mathes) {
-        this.mathes = mathes;
+    public void setMatches(List<Match> mathes) {
+        this.matches = mathes;
     }
 
     public void setId(long id) {
@@ -69,6 +69,6 @@ public class Team {
 
     @Override
     public String toString() {
-        return "Team{" + "id=" + id + ", teamName='" + teamName + '\'' + ", totalMatches=" + totalMatches + ", totalWins=" + totalWins + ", mathes=" + mathes + '}';
+        return "Team{" + "id=" + id + ", teamName='" + teamName + '\'' + ", totalMatches=" + totalMatches + ", totalWins=" + totalWins + ", matches=" + matches + '}';
     }
 }
